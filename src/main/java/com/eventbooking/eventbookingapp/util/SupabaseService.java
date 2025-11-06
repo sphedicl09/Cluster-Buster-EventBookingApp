@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 public class SupabaseService {
     private static final String SUPABASE_URL = System.getenv("SUPABASE_URL");
     private static final String API_KEY = System.getenv("SUPABASE_KEY");
+    private static String format;
 
     private static HttpURLConnection setupConnection(String endpoint, String method) throws IOException {
         URL url = new URL(SUPABASE_URL + endpoint);
@@ -31,7 +32,7 @@ public class SupabaseService {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return "[]"; // empty JSON array to avoid nulls
+            return "[]";
         }
     }
 
@@ -42,16 +43,14 @@ public class SupabaseService {
         );
 
         try {
-            // "events?select=*" means "save this new event, then return the full row back to me"
             HttpURLConnection conn = setupConnection("events?select=*", "POST");
             try (OutputStream os = conn.getOutputStream()) {
                 os.write(json.getBytes(StandardCharsets.UTF_8));
             }
 
             int code = conn.getResponseCode();
-            if (code == 201) { // 201 means "Created"
+            if (code == 201) { 
                 try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
-                    // Return the JSON of the new event
                     return br.lines().reduce("", (acc, line) -> acc + line);
                 }
             } else {
@@ -64,10 +63,7 @@ public class SupabaseService {
     }
 
     public static String saveTicket(String eventId, String name, String email, String ticketCode) {
-        String json = String.format(
-                "{\"events_id\":\"%s\", \"attendee_name\":\"%s\", \"email\":\"%s\", \"ticket_code\":\"%s\"}", // <-- Change event_id to events_id
-                eventId, name, email, ticketCode
-        );
+        String json = format;
 
         try {
             HttpURLConnection conn = setupConnection("tickets", "POST");
