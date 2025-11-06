@@ -9,7 +9,7 @@ import java.util.Properties;
 public class EmailSender {
 
     private static final String SENDER_EMAIL = "knnthshd@gmail.com";
-    private static final String APP_PASSWORD = "1234567890";
+    private static final String APP_PASSWORD = "vmsq tfoj xdac ozqh";
 
     public static void sendEmailWithAttachment(String recipientEmail, String subject, String body, String attachmentPath) throws Exception {
         Properties props = new Properties();

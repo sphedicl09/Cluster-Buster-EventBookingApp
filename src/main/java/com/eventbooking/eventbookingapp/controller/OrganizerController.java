@@ -2,6 +2,7 @@ package com.eventbooking.eventbookingapp.controller;
 
 import com.eventbooking.eventbookingapp.model.EventManager;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,6 +14,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class OrganizerController {
+
+    @FXML
+    public void initialize() {
+        EventManager.loadEventsFromSupabase();
+    }
 
     public void switchToAttendee(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/eventbooking/eventbookingapp/attendee-view.fxml"));
@@ -38,15 +44,27 @@ public class OrganizerController {
         createBtn.setStyle("-fx-background-color: #00bfff; -fx-text-fill: white; -fx-font-weight: bold;");
         createBtn.setOnAction(e -> {
             String eventName = nameField.getText();
-            EventManager.addEvent(eventName);
+            String capacityText = capacityField.getText();
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Event Created");
-            alert.setHeaderText(null);
-            alert.setContentText("Event '" + eventName + "' created successfully!");
-            styleAlertSafe(alert);
-            alert.showAndWait();
-            dialog.close();
+            try {
+                int capacity = Integer.parseInt(capacityText);
+                EventManager.addEvent(eventName, capacity);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Event Created");
+                alert.setHeaderText(null);
+                alert.setContentText("Event '" + eventName + "' created successfully!");
+                styleAlertSafe(alert);
+                alert.showAndWait();
+                dialog.close();
+
+            } catch (NumberFormatException ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Input");
+                alert.setHeaderText(null);
+                alert.setContentText("Please enter a valid number for capacity.");
+                styleAlertSafe(alert);
+                alert.showAndWait();
+            }
         });
 
         VBox layout = new VBox(10, title, nameField, capacityField, createBtn);
