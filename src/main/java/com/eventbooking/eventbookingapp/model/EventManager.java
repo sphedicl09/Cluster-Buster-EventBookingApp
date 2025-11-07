@@ -50,7 +50,7 @@ public class EventManager {
             events.clear();
             for (int i = 0; i < array.length(); i++) {
                 JSONObject obj = array.getJSONObject(i);
-                String id = obj.getString("id");
+                String id = obj.getString("events_id");
                 String name = obj.getString("name");
                 int capacity = obj.getInt("capacity");
                 events.add(new Event(id, name, capacity));

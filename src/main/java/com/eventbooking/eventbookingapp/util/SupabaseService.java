@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 public class SupabaseService {
     private static final String SUPABASE_URL = System.getenv("SUPABASE_URL");
     private static final String API_KEY = System.getenv("SUPABASE_KEY");
-    private static String format;
 
     private static HttpURLConnection setupConnection(String endpoint, String method) throws IOException {
         URL url = new URL(SUPABASE_URL + endpoint);
@@ -63,7 +62,10 @@ public class SupabaseService {
     }
 
     public static String saveTicket(String eventId, String name, String email, String ticketCode) {
-        String json = format;
+        String json = String.format(
+                "{\"events_id\":\"%s\", \"attendee_name\":\"%s\", \"email\":\"%s\", \"ticket_code\":\"%s\"}",
+                eventId, name, email, ticketCode
+        );
 
         try {
             HttpURLConnection conn = setupConnection("tickets", "POST");

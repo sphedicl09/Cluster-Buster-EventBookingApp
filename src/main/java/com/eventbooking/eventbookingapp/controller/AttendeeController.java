@@ -32,7 +32,7 @@ public class AttendeeController {
 
         if (selectedEvent == null) {
             new Alert(Alert.AlertType.WARNING, "Please select an event from the list.").showAndWait();
-            return; // Stop the method
+            return;
         }
 
         try {
