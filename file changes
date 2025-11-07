@@ -1,0 +1,6 @@
+- `src/main/java/com/eventbooking/eventbookingapp/controller/OrganizerController.java`
+- `src/main/resources/com/eventbooking/eventbookingapp/organizer-view.fxml`
+- `src/main/java/com/eventbooking/eventbookingapp/model/Event.java`
+- `src/main/java/com/eventbooking/eventbookingapp/model/EventManager.java`
+- `src/main/java/com/eventbooking/eventbookingapp/util/SupabaseService.java`
+- `pom.xml`
