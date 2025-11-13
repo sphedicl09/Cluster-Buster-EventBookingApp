@@ -133,7 +133,6 @@ public class OrganizerController {
         confirm.setTitle("Confirm Deletion");
         confirm.setHeaderText("Delete Event: " + selectedEvent.getName());
         confirm.setContentText("Are you sure? This action cannot be undone.");
-        styleAlertSafe(confirm);
 
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -279,7 +278,10 @@ public class OrganizerController {
                 });
 
                 dbTask.setOnFailed(taskFailure -> {
-                    showAlert(AlertType.ERROR, "Database Error", "An error occurred: " + dbTask.getException().getMessage());
+                    Throwable exception = dbTask.getException();
+                    exception.printStackTrace();
+                    showAlert(AlertType.ERROR, "Database Error",
+                            "Failed to save event. The task failed with: \n" + exception.getMessage());
                 });
 
                 new Thread(dbTask).start();
@@ -303,7 +305,6 @@ public class OrganizerController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
-        styleAlertSafe(alert);
         alert.showAndWait();
     }
 
@@ -313,7 +314,6 @@ public class OrganizerController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
-        styleAlertSafe(alert);
         alert.showAndWait();
     }
 
@@ -354,7 +354,6 @@ public class OrganizerController {
         alert.setTitle("Event Ending Soon");
         alert.setHeaderText("This event ends in 3 days!");
         alert.setContentText("Would you like to continue accepting bookings?");
-        styleAlertSafe(alert);
         alert.showAndWait();
     }
 
@@ -362,23 +361,6 @@ public class OrganizerController {
         return ((javafx.scene.Node) event.getSource()).getScene().getWindow();
     }
 
-    private void styleAlertSafe(Alert alert) {
-        alert.getDialogPane().setStyle(
-                "-fx-background-color: #2b2b2b; " +
-                        "-fx-font-size: 14px; " +
-                        "-fx-text-fill: white;"
-        );
-        try {
-            for (ButtonType bt : alert.getButtonTypes()) {
-                Button b = (Button) alert.getDialogPane().lookupButton(bt);
-                if (b != null) {
-                    b.setStyle("-fx-background-color: #00bfff; -fx-text-fill: white; -fx-font-weight: bold;");
-                }
-            }
-        } catch (Exception e) {
-
-        }
-    }
 
     private void handleToggleWaitlist() {
         Event selectedEvent = eventsListView.getSelectionModel().getSelectedItem();

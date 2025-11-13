@@ -48,8 +48,10 @@ public class SupabaseService {
 
         try {
             HttpRequest request = createRequestBuilder("events?select=*")
+                    .header("Prefer", "return=representation")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonString))
                     .build();
+
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -74,6 +76,7 @@ public class SupabaseService {
 
         try {
             HttpRequest request = createRequestBuilder("tickets")
+                    .header("Prefer", "return=representation")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonString))
                     .build();
 

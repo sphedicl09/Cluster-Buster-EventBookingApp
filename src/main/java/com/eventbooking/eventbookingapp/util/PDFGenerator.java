@@ -27,9 +27,15 @@ public class PDFGenerator {
             Files.createDirectories(outputDir);
         }
 
-        String filename = firstTicket.getAttendeeName().replaceAll("\\s+", "_")
-                + "_" + firstTicket.getEventName().replaceAll("\\s+", "_")
-                + "_Tickets.pdf";
+        String safeAttendee = firstTicket.getAttendeeName()
+                .replaceAll("\\s+", "_")
+                .replaceAll("[^a-zA-Z0-9_.-]", "");
+
+        String safeEventName = firstTicket.getEventName()
+                .replaceAll("\\s+", "_")
+                .replaceAll("[^a-zA-Z0-9_.-]", "");
+
+        String filename = safeAttendee + "_" + safeEventName + "_Tickets.pdf";
         Path outputFile = outputDir.resolve(filename);
 
         Document document = new Document();

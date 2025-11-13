@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import javafx.application.Platform;
 
 public class EventManager {
     private static final ObservableList<Event> events = FXCollections.observableArrayList();
@@ -31,21 +32,29 @@ public class EventManager {
             JSONArray array = new JSONArray(response);
             if (array.length() > 0) {
                 JSONObject obj = array.getJSONObject(0);
-                String id = obj.getString("events_id");
-                String name = obj.getString("name");
-                int cap = obj.getInt("capacity");
+                String id = obj.optString("events_id");
+                if (id == null || id.isEmpty()) {
+                    System.out.println("⚠️ Supabase save event failed: Response missing 'events_id'");
+                    return false;
+                }
+                String name = obj.optString("name", "Unnamed Event");
+                int cap = obj.optInt("capacity", 0);
                 String poster = obj.optString("poster_url", null);
                 String syn = obj.optString("synopsis", "");
 
-                events.add(new Event(id, name, cap, 0, false, true, eventDate, posterUrl, synopsis));
+                Event newEvent = new Event(id, name, cap, 0, false, true, eventDate, poster, syn);
+                Platform.runLater(() -> {
+                    events.add(newEvent);
+                });
                 System.out.println("✅ Event saved to Supabase and added to local list.");
                 return true;
             }
             return false;
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("⚠️ Failed to save event to Supabase.");
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
@@ -57,7 +66,7 @@ public class EventManager {
             events.clear();
             for (int i = 0; i < array.length(); i++) {
                 JSONObject obj = array.getJSONObject(i);
-                String id = obj.getString("events_id");
+                String id = obj.optString("events_id");
                 String name = obj.optString("name", "Unnamed Event");
                 int capacity = obj.optInt("capacity", 0);
                 boolean waitlist = obj.optBoolean("waitlist_enabled", false);
