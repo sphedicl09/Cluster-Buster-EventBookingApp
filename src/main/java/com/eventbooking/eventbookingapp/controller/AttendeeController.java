@@ -2,65 +2,52 @@ package com.eventbooking.eventbookingapp.controller;
 
 import com.eventbooking.eventbookingapp.model.Event;
 import com.eventbooking.eventbookingapp.model.EventManager;
+import com.eventbooking.eventbookingapp.util.ViewSwitcher;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-import java.io.IOException;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.ListCell;
-import com.eventbooking.eventbookingapp.util.ViewSwitcher;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
-import com.eventbooking.eventbookingapp.controller.EventDetailsController;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class AttendeeController {
 
     @FXML
-    private ListView<Event> eventList;
+    private FlowPane eventFlowPane;
 
     public void initialize() {
-        eventList.setItems(EventManager.getEvents());
+        loadEventCards();
+    }
 
-        eventList.setCellFactory(lv -> new ListCell<Event>() {
-            private Tooltip tooltip = new Tooltip();
+    private void loadEventCards() {
+        eventFlowPane.getChildren().clear();
+        ObservableList<Event> events = EventManager.getEvents();
 
-            @Override
-            public void updateItem(Event event, boolean empty) {
-                super.updateItem(event, empty);
-                if (empty || event == null) {
-                    setText(null);
-                    setTooltip(null);
-                } else {
-                    setText(event.toString());
+        for (Event event : events) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/eventbooking/eventbookingapp/event-card.fxml"));
+                VBox eventCard = loader.load();
 
-                    String status = event.isAcceptingBookings() ? "Open" : "Closed";
-                    String date = (event.getEventDate() != null) ?
-                            event.getEventDate().toLocalDate().toString() : "No date set";
+                EventCardController controller = loader.getController();
+                controller.setData(event);
 
-                    tooltip.setText(
-                            "Event: " + event.getName() + "\n" +
-                                    "Date: " + date + "\n" +
-                                    "Booked: " + event.getBookedCount() + " / " + event.getCapacity() + "\n" +
-                                    "Status: " + status
-                    );
-                    setTooltip(tooltip);
-                }
+                eventCard.setOnMouseClicked(mouseEvent -> {
+                    if (mouseEvent.getClickCount() == 2) {
+                        showEventDetailsWindow(event);
+                    }
+                });
+
+                eventFlowPane.getChildren().add(eventCard);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
-
-        eventList.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                Event selected = eventList.getSelectionModel().getSelectedItem();
-                if (selected != null) {
-                    showEventDetailsWindow(selected);
-                }
-            }
-        });
+        }
     }
 
     private void showEventDetailsWindow(Event event) {
@@ -69,11 +56,12 @@ public class AttendeeController {
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Event Details: " + event.getName());
             dialogStage.initModality(Modality.APPLICATION_MODAL);
-            dialogStage.initOwner(eventList.getScene().getWindow());
+            dialogStage.initOwner(eventFlowPane.getScene().getWindow());
 
             Scene scene = new Scene(loader.load());
             scene.getStylesheets().add(getClass().getResource("/com/eventbooking/eventbookingapp/styles.css").toExternalForm());
             dialogStage.setScene(scene);
+
             EventDetailsController controller = loader.getController();
             controller.loadEventData(event);
 
@@ -90,54 +78,5 @@ public class AttendeeController {
 
     public void switchToOrganizer(ActionEvent event) throws IOException {
         ViewSwitcher.switchScene(event, "/com/eventbooking/eventbookingapp/organizer-view.fxml");
-    }
-
-    @FXML
-    private void openBookingDialog() {
-        Event selectedEvent = eventList.getSelectionModel().getSelectedItem();
-
-        if (selectedEvent == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No Event Selected");
-            alert.setHeaderText(null);
-            alert.setContentText("Please select an event from the list.");
-            alert.showAndWait();
-            return;
-        }
-
-        if (!selectedEvent.isAcceptingBookings()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Booking Closed");
-            alert.setHeaderText(null);
-            alert.setContentText("Bookings for '" + selectedEvent.getName() + "' are currently closed.");
-            alert.showAndWait();
-            return;
-        }
-
-        if (selectedEvent.getBookedCount() >= selectedEvent.getCapacity()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Event Full");
-            alert.setHeaderText(null);
-            alert.setContentText("Sorry, '" + selectedEvent.getName() + "' is fully booked.");
-            alert.showAndWait();
-            return;
-        }
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/eventbooking/eventbookingapp/booking-dialog.fxml"));
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Book Event");
-            Pane root = loader.load();
-            Scene scene = new Scene(root, 400, 370);
-            scene.getStylesheets().add(getClass().getResource("/com/eventbooking/eventbookingapp/styles.css").toExternalForm());
-            dialogStage.setScene(scene);
-            BookingDialogController controller = loader.getController();
-            controller.setSelectedEvent(selectedEvent);
-            dialogStage.showAndWait();
-            eventList.refresh();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -126,26 +126,26 @@
 }
 
 .dialog-pane .header-panel {
-    -fx-background-color: #2b2b2b; /* Graphite background */
+    -fx-background-color: #2b2b2b;
     -fx-padding: 10;
     -fx-background-radius: 6;
 }
 
 .event-ending-dialog {
-    -fx-background-color: #2b2b2b; /* graphite background */
-    -fx-border-color: #4caf50;     /* emerald border */
+    -fx-background-color: #2b2b2b;
+    -fx-border-color: #4caf50;
     -fx-border-width: 2;
     -fx-background-radius: 8;
 }
 
 .event-ending-dialog .header-panel .label {
-    -fx-text-fill: White; /* header text */
+    -fx-text-fill: White;
     -fx-font-size: 18;
     -fx-font-weight: bold;
 }
 
 .event-ending-dialog .content.label {
-    -fx-text-fill: White; /* content text */
+    -fx-text-fill: White;
     -fx-font-size: 14;
 }
 
@@ -196,9 +196,9 @@
 /* --- Booking Dialog Styles --- */
 
 .form-input {
-    -fx-background-color: #2b2b2b;         /* Graphite background */
-    -fx-text-fill: white;                 /* White text for contrast */
-    -fx-border-color: #4caf50;            /* Emerald border */
+    -fx-background-color: #2b2b2b;
+    -fx-text-fill: white;
+    -fx-border-color: #4caf50;
     -fx-border-width: 1;
     -fx-background-radius: 6;
     -fx-font-size: 14;
@@ -206,7 +206,7 @@
 }
 
 .form-input:focused {
-    -fx-border-color: #66bb6a;            /* Lighter emerald on focus */
+    -fx-border-color: #66bb6a;
 }
 
 .form-spinner {
@@ -218,18 +218,17 @@
 }
 
 .form-button {
-    -fx-background-color: #4caf50;        /* Emerald base */
-    -fx-text-fill: #212121;               /* Dark text for contrast */
+    -fx-background-color: #4caf50;
+    -fx-text-fill: #212121;
     -fx-font-weight: bold;
     -fx-background-radius: 6;
     -fx-padding: 8 16 8 16;
 }
 
 .form-button:hover {
-    -fx-background-color: #66bb6a;        /* Emerald hover */
+    -fx-background-color: #66bb6a;
 }
 
-/* Optional: Label styling for field titles */
 .form-label {
     -fx-text-fill: white;
     -fx-font-size: 14;
@@ -238,6 +237,7 @@
 }
 
 /* --- Alert Dialog Styling --- */
+
 .dialog-pane {
     -fx-background-color: #2b2b2b;
     -fx-border-color: #4caf50;
@@ -258,4 +258,40 @@
 
 .dialog-pane .button:hover {
     -fx-background-color: #66bb6a;
+}
+
+/* --- Event Card Styles --- */
+
+.event-card {
+    -fx-background-color: #2b2b2b;
+    -fx-background-radius: 8px;
+    -fx-border-color: #555;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 2);
+    -fx-max-width: 220px;
+    -fx-min-width: 180px;
+}
+
+.event-card:hover {
+    -fx-border-color: #4caf50;
+    -fx-effect: dropshadow(gaussian, rgba(76,175,80,0.3), 15, 0, 0, 3);
+}
+
+.event-card-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+    -fx-padding: 0 5px;
+}
+
+.event-card .button {
+    -fx-font-size: 14px;
+    -fx-padding: 8px 30px;
+    -fx-max-width: infinity;
+}
+
+.event-card ImageView {
+    -fx-max-width: 100%;
+    -fx-max-height: 250px;
 }

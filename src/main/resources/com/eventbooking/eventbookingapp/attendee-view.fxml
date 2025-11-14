@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.HBox?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.eventbooking.eventbookingapp.controller.AttendeeController">
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+                                                fx:controller="com.eventbooking.eventbookingapp.controller.AttendeeController">
 
     <top>
         <ToolBar>
-            <Label text="🎫 Attendee View" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="🎫 Attendee View" />
+
             <Pane HBox.hgrow="ALWAYS" />
-            <Button text="Back to Organizer" onAction="#switchToOrganizer" />
+
+            <Button onAction="#switchToOrganizer" text="Back to Organizer" />
         </ToolBar>
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="15">
-            <Label text="Welcome, Attendee!" style="-fx-font-size: 50px; -fx-font-family: 'Calligrapher';" />
-            <ListView fx:id="eventList" prefHeight="200" prefWidth="250" />
-            <Button text="Book Now" onAction="#openBookingDialog" />
-        </VBox>
+        <ScrollPane fitToWidth="true" style="-fx-background: #212121; -fx-background-color: #212121;">
+            <FlowPane fx:id="eventFlowPane" alignment="CENTER" hgap="20" vgap="20"
+                      style="-fx-padding: 20; -fx-background-color: #212121;" />
+        </ScrollPane>
     </center>
+
 </BorderPane>
