@@ -17,14 +17,10 @@ import java.io.IOException;
 
 public class EventCardController {
 
-    @FXML
-    private VBox eventCard;
-    @FXML
-    private ImageView posterImageView;
-    @FXML
-    private Label eventNameLabel;
-    @FXML
-    private Button bookButton;
+    @FXML private VBox eventCard;
+    @FXML private ImageView posterImageView;
+    @FXML private Label eventNameLabel;
+    @FXML private Button bookButton;
 
     private Event event;
 
@@ -32,11 +28,15 @@ public class EventCardController {
         this.event = event;
         eventNameLabel.setText(event.getName());
 
-        if (event.getPosterUrl() != null && !event.getPosterUrl().isEmpty()) {
-            Image poster = new Image(event.getPosterUrl(), true); // true = load in background
-            posterImageView.setImage(poster);
+        if (event.getPosterUrl() != null && !event.getPosterUrl().isBlank()) {
+            try {
+                Image poster = new Image(event.getPosterUrl(), true);
+                posterImageView.setImage(poster);
+            } catch (Exception e) {
+                System.out.println("Failed to load image from URL: " + event.getPosterUrl());
+            }
         } else {
-            posterImageView.setImage(new Image(getClass().getResourceAsStream("/path/to/placeholder.png")));
+            
         }
 
         if (event.getBookedCount() >= event.getCapacity()) {
