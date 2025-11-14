@@ -5,7 +5,6 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
@@ -15,7 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class PDFGenerator {
-
     public static String generateTicketPDF(List<Ticket> tickets) throws Exception {
         if (tickets == null || tickets.isEmpty()) {
             throw new IllegalArgumentException("Ticket list cannot be empty.");

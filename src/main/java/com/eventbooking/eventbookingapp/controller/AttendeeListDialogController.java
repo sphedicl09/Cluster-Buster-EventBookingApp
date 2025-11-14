@@ -23,6 +23,9 @@ public class AttendeeListDialogController {
 
     public void loadAttendees(String eventId, String eventName) {
         eventNameLabel.setText("Attendees for: " + eventName);
+        eventNameLabel.getStyleClass().add("dialog-header-label"); // ← Style header
+
+        attendeeListView.getStyleClass().add("attendee-list"); // ← Style list view
 
         ProgressIndicator p = new ProgressIndicator();
         p.setMaxSize(40, 40);
@@ -38,7 +41,9 @@ public class AttendeeListDialogController {
 
                 if (jsonArray.length() == 0) {
                     javafx.application.Platform.runLater(() -> {
-                        attendeeListView.setPlaceholder(new Label("No attendees have booked this event yet."));
+                        Label noAttendeesLabel = new Label("No attendees have booked this event yet.");
+                        noAttendeesLabel.getStyleClass().add("placeholder-label"); // ← Style placeholder
+                        attendeeListView.setPlaceholder(noAttendeesLabel);
                     });
                     return null;
                 }
@@ -54,7 +59,9 @@ public class AttendeeListDialogController {
         };
 
         fetchAttendeesTask.setOnFailed(e -> {
-            attendeeListView.setPlaceholder(new Label("Error: Could not load attendees."));
+            Label errorLabel = new Label("Error: Could not load attendees.");
+            errorLabel.getStyleClass().add("placeholder-label"); // ← Style error
+            attendeeListView.setPlaceholder(errorLabel);
             fetchAttendeesTask.getException().printStackTrace();
         });
 

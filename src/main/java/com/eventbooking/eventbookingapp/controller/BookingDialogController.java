@@ -16,13 +16,10 @@ public class BookingDialogController {
 
     @FXML
     private TextField eventNameField;
-
     @FXML
     private TextField attendeeNameField;
-
     @FXML
     private TextField emailField;
-
     @FXML
     private Spinner<Integer> ticketSpinner;
 
@@ -30,10 +27,14 @@ public class BookingDialogController {
 
     @FXML
     public void initialize() {
-        SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
         ticketSpinner.setValueFactory(valueFactory);
         confirmBookingButton.setDefaultButton(true);
+        eventNameField.getStyleClass().add("form-input");
+        attendeeNameField.getStyleClass().add("form-input");
+        emailField.getStyleClass().add("form-input");
+        ticketSpinner.getStyleClass().add("form-spinner");
+        confirmBookingButton.getStyleClass().add("form-button");
     }
 
     @FXML

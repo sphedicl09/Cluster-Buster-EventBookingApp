@@ -3,7 +3,6 @@ package com.eventbooking.eventbookingapp.util;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import jakarta.activation.*;
-
 import java.util.Properties;
 
 public class EmailSender {

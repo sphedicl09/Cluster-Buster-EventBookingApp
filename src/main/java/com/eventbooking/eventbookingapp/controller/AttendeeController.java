@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.scene.control.Tooltip;
@@ -126,11 +127,15 @@ public class AttendeeController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/eventbooking/eventbookingapp/booking-dialog.fxml"));
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Book Event");
-            dialogStage.setScene(new Scene(loader.load(), 400, 370));
+            Pane root = loader.load();
+            Scene scene = new Scene(root, 400, 370);
+            scene.getStylesheets().add(getClass().getResource("/com/eventbooking/eventbookingapp/styles.css").toExternalForm());
+            dialogStage.setScene(scene);
             BookingDialogController controller = loader.getController();
             controller.setSelectedEvent(selectedEvent);
             dialogStage.showAndWait();
             eventList.refresh();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

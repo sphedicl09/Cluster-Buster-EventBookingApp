@@ -9,12 +9,18 @@ import java.time.format.DateTimeFormatter;
 
 public class EventDetailsController {
 
-    @FXML private ImageView posterView;
-    @FXML private Label eventNameLabel;
-    @FXML private Label eventDateLabel;
-    @FXML private Label eventCapacityLabel;
-    @FXML private Label eventStatusLabel;
-    @FXML private Label eventSynopsisLabel;
+    @FXML
+    private ImageView posterView;
+    @FXML
+    private Label eventNameLabel;
+    @FXML
+    private Label eventDateLabel;
+    @FXML
+    private Label eventCapacityLabel;
+    @FXML
+    private Label eventStatusLabel;
+    @FXML
+    private Label eventSynopsisLabel;
 
     public void loadEventData(Event event) {
         eventNameLabel.setText(event.getName());

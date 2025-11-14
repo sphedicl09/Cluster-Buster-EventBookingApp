@@ -41,7 +41,6 @@ public class OrganizerController {
     @FXML
     private MenuItem toggleBookingMenuItem;
 
-
     @FXML
     public void initialize() {
         Task<Void> loadEventsTask = new Task<>() {
@@ -205,8 +204,12 @@ public class OrganizerController {
         Spinner<Integer> minuteSpinner = new Spinner<>(0, 59, 0);
         minuteSpinner.setPrefWidth(70);
 
-        HBox timeBox = new HBox(10, new Label("Time (HH:mm):"), hourSpinner, minuteSpinner);
+        Label timeLabel = new Label("Time (HH:mm):");
+        timeLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;");
+
+        HBox timeBox = new HBox(10, timeLabel, hourSpinner, minuteSpinner);
         timeBox.setAlignment(Pos.CENTER_LEFT);
+
 
         TextField posterUrlField = new TextField();
         posterUrlField.setPromptText("Enter Poster Image URL (e.g., https://...)");
@@ -327,13 +330,16 @@ public class OrganizerController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/eventbooking/eventbookingapp/attendee-list-dialog.fxml"));
             Stage dialogStage = new Stage();
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(getClass().getResource("/com/eventbooking/eventbookingapp/styles.css").toExternalForm());
             dialogStage.setTitle("Attendee List");
             dialogStage.initModality(Modality.APPLICATION_MODAL);
             dialogStage.initOwner(getOwnerWindow(event));
-            dialogStage.setScene(new Scene(loader.load()));
+            dialogStage.setScene(scene);
             AttendeeListDialogController controller = loader.getController();
             controller.loadAttendees(selectedEvent.getId(), selectedEvent.getName());
             dialogStage.showAndWait();
+
         } catch (IOException e) {
             e.printStackTrace();
             showAlert(AlertType.ERROR, "Load Error", "Could not load the attendee list view.", getOwnerWindow(event));
