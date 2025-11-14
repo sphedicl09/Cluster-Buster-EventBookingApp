@@ -57,24 +57,29 @@ This app **will not run** without setting up the backend database and environmen
       ```bash
       -- Create the 'events' table
       create table public.events (
-        events_id uuid not null default gen_random_uuid (),
-        name text null,
-        capacity numeric null,
-        created_at timestamp with time zone not null default now(), -- Auto-fills the creation time
-        constraint events_pkey primary key (events_id)
-      );
+      events_id uuid not null default gen_random_uuid (),
+      name text null,
+      capacity numeric null,
+      created_at timestamp without time zone not null default now(),
+      waitlist_enabled boolean null default false,
+      accepting_bookings boolean null default true,
+      event_date timestamp with time zone null default now(),
+      poster_url text null,
+      synopsis text null,
+      constraint events_pkey primary key (events_id)
+      ) TABLESPACE pg_default;
       
       -- Create the 'tickets' table
       create table public.tickets (
-        tickets_id uuid not null default gen_random_uuid (),
-        events_id uuid null, -- This is the foreign key
-        attendee_name text null,
-        email text null,
-        ticket_code text null,
-        created_at timestamp with time zone not null default now(), -- Auto-fills the creation time
-        constraint tickets_pkey primary key (tickets_id),
-        constraint tickets_events_id_fkey foreign key (events_id) references events (events_id) on delete cascade -- Deletes tickets if event is deleted
-      );
+      tickets_id uuid not null default gen_random_uuid (),
+      events_id uuid not null,
+      attendee_name text null,
+      email text null,
+      ticket_code text null,
+      created_at timestamp without time zone not null default now(),
+      constraint tickets_pkey primary key (tickets_id),
+      constraint tickets_events_id_fkey foreign KEY (events_id) references events (events_id)
+      ) TABLESPACE pg_default;
       ```
    6. **Set Security Policies (RLS):** By default, your tables are read-only. You must enable `INSERT` for the app to work.
       
